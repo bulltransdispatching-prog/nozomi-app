@@ -28,7 +28,6 @@
             padding: 20px;
         }
         
-        /* LOGIN STYLES */
         .login-page {
             width: 100%;
             max-width: 400px;
@@ -131,7 +130,17 @@
         
         .login-footer i { margin-right: 5px; }
         
-        /* APP STYLES */
+        .login-hint {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4fd;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #1e3c72;
+        }
+        
+        .login-hint strong { display: block; margin-bottom: 5px; }
+        
         .app-page {
             display: none;
             width: 100%;
@@ -540,7 +549,6 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
         
-        /* Install Banner */
         .install-banner {
             position: fixed;
             bottom: 20px;
@@ -631,6 +639,11 @@
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
             </form>
+            
+            <div class="login-hint">
+                <strong>📌 Login Credentials:</strong>
+                Username: <b>admin</b> | Password: <b>admin123</b>
+            </div>
             
             <div class="login-footer">
                 <i class="fas fa-shield-alt"></i> Secure Login
@@ -834,12 +847,14 @@
             appId: "1:795824130015:web:e9485b5fa19ff459e8266a"
         };
         
-        // USERS
+        // =============================================
+        // SIMPLE LOGIN CREDENTIALS
+        // =============================================
         const USERS = {
-            "admin":    { password: "Admin@123",    name: "Administrator" },
-            "nouman":   { password: "Nozomi@2024",  name: "Nouman Shah Bodla" },
-            "operator1":{ password: "Op1@123",      name: "Operator 1" },
-            "operator2":{ password: "Op2@123",      name: "Operator 2" }
+            "admin":   { password: "admin123",   name: "Administrator" },
+            "nouman":  { password: "nouman123",  name: "Nouman Shah Bodla" },
+            "op1":     { password: "op1",        name: "Operator 1" },
+            "op2":     { password: "op2",        name: "Operator 2" }
         };
         
         // MACHINES
@@ -870,17 +885,23 @@
             }
         });
         
-        // LOGIN
+        // LOGIN FUNCTION
         function login(e) {
             e.preventDefault();
             const u = document.getElementById('username').value.trim().toLowerCase();
             const p = document.getElementById('password').value;
             const btn = document.getElementById('loginBtn');
+            
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            
             setTimeout(() => {
                 if (USERS[u] && USERS[u].password === p) {
-                    currentUser = { username: u, name: USERS[u].name, loginTime: new Date().toLocaleString() };
+                    currentUser = { 
+                        username: u, 
+                        name: USERS[u].name, 
+                        loginTime: new Date().toLocaleString() 
+                    };
                     localStorage.setItem('nozomi_user', JSON.stringify(currentUser));
                     hideError();
                     showApp();
@@ -890,7 +911,7 @@
                 }
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
-            }, 400);
+            }, 500);
         }
         
         function logout() {
@@ -904,6 +925,7 @@
             document.getElementById('errorText').textContent = msg;
             document.getElementById('errorMsg').classList.add('show');
         }
+        
         function hideError() {
             document.getElementById('errorMsg').classList.remove('show');
         }
@@ -1109,4 +1131,371 @@
             let hasData=false;
             
             for (let d = 1; d <= days; d++) {
-                const date = 
+                const date = `${year}-${mon}-${String(d).padStart(2,'0')}`;
+                ['DAY SHIFT','NIGHT SHIFT'].forEach(shift=>{
+                    const key = `${date}_${shift}`.replace(/[.#$[\]]/g,'-');
+                    const entry = allData[key];
+                    if (entry && entry.machines) {
+                        hasData=true;
+                        let maxRows = 1;
+                        Object.values(entry.machines).forEach(arr=>maxRows=Math.max(maxRows,arr.length));
+                        for (let r=0;r<maxRows;r++) {
+                            html += '<tr>';
+                            if (r===0) {
+                                html += `<td class="date-cell" rowspan="${maxRows}">${mon}/${d}</td>`;
+                                html += `<td class="shift-cell" rowspan="${maxRows}">${shift}</td>`;
+                            }
+                            MACHINES.forEach(m=>{
+                                const p = (entry.machines[m.name]||[])[r];
+                                if (p) {
+                                    html += `<td>${p.product}</td><td>${p.quantity}</td><td>${p.uom}</td>`;
+                                    if(!totals[m.name][p.uom]) totals[m.name][p.uom]=0;
+                                    totals[m.name][p.uom]+=p.quantity;
+                                } else {
+                                    html+='<td></td><td></td><td></td>';
+                                }
+                            });
+                            if (r===0) {
+                                html += `<td rowspan="${maxRows}">
+                                    <button class="btn btn-primary" style="padding:6px 10px; font-size:11px; margin-bottom:4px;" onclick="openEditModal('${key}')">
+                                        <i class="fas fa-pen"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger" style="padding:6px 10px; font-size:11px;" onclick="deleteEntry('${key}')">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </td>`;
+                            }
+                            html += '</tr>';
+                        }
+                    }
+                });
+            }
+            
+            html += '<tr class="total-row"><td colspan="2"><strong>TOTAL</strong></td>';
+            MACHINES.forEach(m=>{
+                const t = totals[m.name];
+                const str = Object.entries(t).map(([u,q])=>`${q} ${u}`).join(' + ') || '0';
+                html += `<td colspan="3"><strong>${str}</strong></td>`;
+            });
+            html += '<td></td></tr></tbody></table>';
+            
+            if (!hasData) {
+                html = '<p style="padding:40px;text-align:center;color:#666;"><i class="fas fa-inbox" style="font-size:40px;display:block;margin-bottom:10px;"></i>No data for this month</p>';
+            }
+            document.getElementById('reportContainer').innerHTML = html;
+        }
+        
+        function openEditModal(key) {
+            const entry = allData[key];
+            if (!entry) { toast('Entry not found', 'error'); return; }
+            currentEditKey = key;
+            
+            let html = `
+                <div class="form-section">
+                    <div class="form-row">
+                        <div>
+                            <label>Date</label>
+                            <input type="date" id="editDate" value="${entry.date}">
+                        </div>
+                        <div>
+                            <label>Shift</label>
+                            <select id="editShift">
+                                <option value="DAY SHIFT" ${entry.shift==='DAY SHIFT'?'selected':''}>DAY SHIFT</option>
+                                <option value="NIGHT SHIFT" ${entry.shift==='NIGHT SHIFT'?'selected':''}>NIGHT SHIFT</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="machine-grid" id="editMachines">
+            `;
+            
+            MACHINES.forEach(m => {
+                const prods = (entry.machines && entry.machines[m.name]) || [];
+                html += `
+                    <div class="machine-card">
+                        <h4><i class="fas ${m.icon}"></i> ${m.name}</h4>
+                        <div class="products" data-machine="${m.name}">
+                `;
+                if (prods.length) {
+                    prods.forEach(p => {
+                        html += `
+                            <div class="product-row">
+                                <input type="text" class="pname" placeholder="Product" value="${p.product}">
+                                <input type="number" class="pqty" placeholder="Qty" min="0" value="${p.quantity}">
+                                <select class="puom">
+                                    <option ${p.uom==='PCS'?'selected':''}>PCS</option>
+                                    <option ${p.uom==='CTNS'?'selected':''}>CTNS</option>
+                                    <option ${p.uom==='BOX'?'selected':''}>BOX</option>
+                                    <option ${p.uom==='PKTS'?'selected':''}>PKTS</option>
+                                </select>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += `
+                        <div class="product-row">
+                            <input type="text" class="pname" placeholder="Product">
+                            <input type="number" class="pqty" placeholder="Qty" min="0">
+                            <select class="puom">
+                                <option>PCS</option><option>CTNS</option><option>BOX</option><option>PKTS</option>
+                            </select>
+                        </div>
+                    `;
+                }
+                html += `
+                        </div>
+                        <button class="add-btn" onclick="addRow(this)"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            document.getElementById('editModalBody').innerHTML = html;
+            document.getElementById('editModal').classList.add('show');
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+            currentEditKey = null;
+        }
+        
+        async function saveEdit() {
+            if (!currentEditKey) return;
+            const date = document.getElementById('editDate').value;
+            const shift = document.getElementById('editShift').value;
+            if (!date || !shift) { toast('Date & shift required', 'warning'); return; }
+            
+            const entry = {
+                date,
+                shift,
+                machines: {},
+                savedBy: currentUser ? currentUser.name : 'Unknown',
+                timestamp: Date.now()
+            };
+            
+            document.querySelectorAll('#editMachines .products').forEach(container => {
+                const machine = container.dataset.machine;
+                const products = [];
+                container.querySelectorAll('.product-row').forEach(row => {
+                    const name = row.querySelector('.pname').value.trim();
+                    const qty  = row.querySelector('.pqty').value;
+                    const uom  = row.querySelector('.puom').value;
+                    if (name && qty) products.push({ product: name, quantity: parseInt(qty), uom });
+                });
+                if (products.length) entry.machines[machine] = products;
+            });
+            
+            const newKey = `${date}_${shift}`.replace(/[.#$[\]]/g, '-');
+            try {
+                if (currentEditKey !== newKey) {
+                    await dataRef.child(currentEditKey).remove();
+                    delete allData[currentEditKey];
+                }
+                await dataRef.child(newKey).set(entry);
+                allData[newKey] = entry;
+                toast('✅ Changes saved!', 'success');
+                closeEditModal();
+                generateReport();
+                updateStats();
+            } catch (e) {
+                console.error(e);
+                toast('❌ Error saving changes', 'error');
+            }
+        }
+        
+        async function deleteEntry(key) {
+            if (!confirm('Delete this entry?')) return;
+            try {
+                await dataRef.child(key).remove();
+                delete allData[key];
+                toast('✅ Entry deleted', 'success');
+                generateReport();
+                updateStats();
+            } catch (e) {
+                console.error(e);
+                toast('❌ Error deleting entry', 'error');
+            }
+        }
+        
+        function generateSummary() {
+            const month = document.getElementById('summaryMonth').value;
+            if (!month) return;
+            const totals = {}; MACHINES.forEach(m=>totals[m.name]={});
+            Object.values(allData).forEach(entry=>{
+                if(entry.date && entry.date.startsWith(month) && entry.machines){
+                    Object.entries(entry.machines).forEach(([machine,products])=>{
+                        products.forEach(p=>{
+                            if(!totals[machine][p.uom]) totals[machine][p.uom]=0;
+                            totals[machine][p.uom]+=p.quantity;
+                        });
+                    });
+                }
+            });
+            document.getElementById('summaryCards').innerHTML=MACHINES.map(m=>{
+                const t=totals[m.name]||{};
+                const str=Object.entries(t).map(([u,q])=>`${q} ${u}`).join(' + ')||'0';
+                return `<div class="summary-card"><div class="icon"><i class="fas ${m.icon}"></i></div><h3>${m.name}</h3><div class="value">${str}</div></div>`;
+            }).join('');
+        }
+        
+        function updateStats() {
+            const entries=Object.keys(allData).length;
+            let products=0; const months=new Set();
+            Object.values(allData).forEach(entry=>{
+                if(entry.date) months.add(entry.date.slice(0,7));
+                if(entry.machines) Object.values(entry.machines).forEach(p=>products+=p.length);
+            });
+            document.getElementById('statsGrid').innerHTML=`
+                <div class="stat-box"><div class="number">${entries}</div><div class="label">Entries</div></div>
+                <div class="stat-box"><div class="number">${products}</div><div class="label">Products</div></div>
+                <div class="stat-box"><div class="number">${months.size}</div><div class="label">Months</div></div>
+                <div class="stat-box"><div class="number">✓</div><div class="label">Synced</div></div>`;
+        }
+        
+        function downloadBackup() {
+            const blob=new Blob([JSON.stringify(allData,null,2)],{type:'application/json'});
+            const a=document.createElement('a');
+            a.href=URL.createObjectURL(blob);
+            a.download=`nozomi_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            toast('✅ Backup downloaded!','success');
+        }
+        
+        function exportExcel() {
+            if(!currentMonth){toast('Select month first!','warning');return;}
+            const [year,mon]=currentMonth.split('-');
+            const days=new Date(year,mon,0).getDate();
+            const data=[['DATE','SHIFT',...MACHINES.flatMap(m=>[m.name+' Product',m.name+' Qty',m.name+' UOM'])]];
+            for(let d=1;d<=days;d++){
+                const date=`${year}-${mon}-${String(d).padStart(2,'0')}`;
+                ['DAY SHIFT','NIGHT SHIFT'].forEach(shift=>{
+                    const key=`${date}_${shift}`.replace(/[.#$[\]]/g,'-');
+                    const entry=allData[key];
+                    if(entry && entry.machines){
+                        let rows=1;
+                        Object.values(entry.machines).forEach(a=>rows=Math.max(rows,a.length));
+                        for(let r=0;r<rows;r++){
+                            const row=[r===0?date:'',r===0?shift:''];
+                            MACHINES.forEach(m=>{
+                                const p=(entry.machines[m.name]||[])[r];
+                                row.push(p?p.product:'',p?p.quantity:'',p?p.uom:'');
+                            });
+                            data.push(row);
+                        }
+                    }
+                });
+            }
+            const ws=XLSX.utils.aoa_to_sheet(data);
+            const wb=XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb,ws,'Report');
+            XLSX.writeFile(wb,`Nozomi_${currentMonth}.xlsx`);
+            toast('✅ Excel exported!','success');
+        }
+        
+        function exportAllExcel() {
+            const data=[['DATE','SHIFT',...MACHINES.flatMap(m=>[m.name+' Product',m.name+' Qty',m.name+' UOM'])]];
+            Object.values(allData).sort((a,b)=>a.date.localeCompare(b.date)).forEach(entry=>{
+                if(entry.machines){
+                    let rows=1;
+                    Object.values(entry.machines).forEach(a=>rows=Math.max(rows,a.length));
+                    for(let r=0;r<rows;r++){
+                        const row=[r===0?entry.date:'',r===0?entry.shift:''];
+                        MACHINES.forEach(m=>{
+                            const p=(entry.machines[m.name]||[])[r];
+                            row.push(p?p.product:'',p?p.quantity:'',p?p.uom:'');
+                        });
+                        data.push(row);
+                    }
+                }
+            });
+            const ws=XLSX.utils.aoa_to_sheet(data);
+            const wb=XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb,ws,'All Data');
+            XLSX.writeFile(wb,'Nozomi_All_Data.xlsx');
+            toast('✅ All data exported!','success');
+        }
+        
+        async function restoreBackup(e) {
+            const file=e.target.files[0];
+            if(!file)return;
+            if(!confirm('This will merge with existing data. Continue?')){e.target.value='';return;}
+            showLoading('Restoring...');
+            const reader=new FileReader();
+            reader.onload=async(ev)=>{
+                try{
+                    const data=JSON.parse(ev.target.result);
+                    for(const [key,val] of Object.entries(data)){
+                        await dataRef.child(key).set(val);
+                    }
+                    hideLoading();
+                    toast('✅ Backup restored!','success');
+                }catch(err){
+                    hideLoading();
+                    toast('❌ Invalid file!','error');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value='';
+        }
+        
+        function printReport() {
+            if(!currentMonth){toast('Select month first!','warning');return;}
+            window.print();
+        }
+        
+        function showLoading(text){
+            document.getElementById('loadingText').textContent=text||'Loading...';
+            document.getElementById('loading').classList.add('show');
+        }
+        
+        function hideLoading(){
+            document.getElementById('loading').classList.remove('show');
+        }
+        
+        function toast(msg,type){
+            const t=document.createElement('div');
+            t.className='toast '+type;
+            t.textContent=msg;
+            document.body.appendChild(t);
+            setTimeout(()=>{
+                t.style.opacity='0';
+                t.style.transition='opacity 0.3s';
+                setTimeout(()=>t.remove(),300);
+            },3000);
+        }
+        
+        // PWA SERVICE WORKER
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function(registration) {
+                        console.log('PWA: ServiceWorker registered');
+                    })
+                    .catch(function(error) {
+                        console.log('PWA: ServiceWorker failed', error);
+                    });
+            });
+        }
+        
+        // PWA INSTALL PROMPT
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                if (deferredPrompt) {
+                    document.getElementById('installBanner').classList.add('show');
+                }
+            }, 3000);
+        });
+        
+        document.getElementById('installBanner').addEventListener('click', async function() {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            this.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
