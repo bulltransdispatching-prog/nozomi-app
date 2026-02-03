@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -179,6 +178,26 @@
             margin-left: 8px;
         }
         
+        .editor-badge {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        
+        .viewer-badge {
+            background: #17a2b8;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        
         .logout-btn {
             background: rgba(255,255,255,0.1);
             color: white;
@@ -255,6 +274,7 @@
         .alert-info { background: #d1ecf1; color: #0c5460; }
         .alert-success { background: #d4edda; color: #155724; }
         .alert-warning { background: #fff3cd; color: #856404; }
+        .alert-danger { background: #f8d7da; color: #721c24; }
         
         .form-section {
             background: #f8f9fa;
@@ -688,22 +708,192 @@
         .import-stat .num { font-size: 24px; font-weight: 700; }
         .import-stat .lbl { font-size: 11px; opacity: 0.9; }
         
-        /* Debug Panel */
-        .debug-panel {
-            background: #1a1a2e;
-            color: #00ff00;
+        /* Search Section Styles */
+        .search-section {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid #667eea30;
+        }
+        
+        .search-section h4 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .search-section h4 i {
+            color: #667eea;
+            margin-right: 10px;
+        }
+        
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .search-grid label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+        
+        .search-grid input,
+        .search-grid select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: 0.3s;
+        }
+        
+        .search-grid input:focus,
+        .search-grid select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+        }
+        
+        .search-results {
+            margin-top: 20px;
+        }
+        
+        .search-result-card {
+            background: white;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        
+        .search-result-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102,126,234,0.15);
+        }
+        
+        .search-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .search-result-date {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+        
+        .search-result-shift {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .search-result-shift.night {
+            background: linear-gradient(135deg, #2d3436, #636e72);
+        }
+        
+        .search-machine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .search-machine-card {
+            background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
-            margin-top: 20px;
-            font-family: monospace;
-            font-size: 12px;
-            max-height: 200px;
-            overflow-y: auto;
+        }
+        
+        .search-machine-card h5 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .search-product-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: white;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+        
+        .search-product-item .qty {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .no-results i {
+            font-size: 50px;
+            color: #ddd;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .highlight {
+            background: #ffd966;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        /* View Only Mode Styles */
+        .view-only-overlay {
+            position: relative;
+        }
+        
+        .view-only-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.7);
+            z-index: 10;
+            cursor: not-allowed;
             display: none;
         }
         
-        .debug-panel.show {
+        .view-only-overlay.disabled::before {
             display: block;
+        }
+        
+        .view-only-notice {
+            background: linear-gradient(135deg, #17a2b8, #6dd5ed);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .view-only-notice i {
+            font-size: 24px;
         }
         
         @media (max-width: 768px) {
@@ -716,10 +906,12 @@
             .user-bar { flex-direction: column; gap: 10px; }
             .import-stats { grid-template-columns: repeat(2, 1fr); }
             .current-entry-display { flex-direction: column; gap: 10px; }
+            .search-grid { grid-template-columns: 1fr; }
+            .search-result-header { flex-direction: column; gap: 10px; text-align: center; }
         }
         
         @media print {
-            .user-bar, .status-bar, .nav-tabs, .btn-group, .report-controls, .alert, .add-btn, .login-page, .backup-section, .install-banner { display: none !important; }
+            .user-bar, .status-bar, .nav-tabs, .btn-group, .report-controls, .alert, .add-btn, .login-page, .backup-section, .install-banner, .search-section { display: none !important; }
             .app-page { display: block !important; }
             .tab-content { display: block !important; }
         }
@@ -790,6 +982,8 @@
                     <div>
                         <strong id="userName">Admin</strong>
                         <span class="admin-badge" id="adminBadge" style="display:none;">ADMIN</span>
+                        <span class="editor-badge" id="editorBadge" style="display:none;">EDITOR</span>
+                        <span class="viewer-badge" id="viewerBadge" style="display:none;">VIEW ONLY</span>
                         <div style="font-size: 11px; opacity: 0.8;">
                             <i class="fas fa-clock"></i> <span id="loginTime">--</span>
                         </div>
@@ -817,7 +1011,10 @@
                 <button class="nav-tab active" onclick="showTab('entry')">
                     <i class="fas fa-edit"></i><span>Daily Entry</span>
                 </button>
-                <button class="nav-tab" onclick="showTab('import')">
+                <button class="nav-tab" onclick="showTab('search')">
+                    <i class="fas fa-search"></i><span>Search</span>
+                </button>
+                <button class="nav-tab" onclick="showTab('import')" id="importTab">
                     <i class="fas fa-file-import"></i><span>Import</span>
                 </button>
                 <button class="nav-tab" onclick="showTab('report')">
@@ -833,12 +1030,21 @@
             
             <!-- Tab: Daily Entry -->
             <div class="tab-content active" id="entry-tab">
-                <div class="alert alert-info">
+                <!-- View Only Notice -->
+                <div class="view-only-notice" id="viewOnlyNotice" style="display: none;">
+                    <i class="fas fa-eye"></i>
+                    <div>
+                        <strong>View Only Mode</strong>
+                        <p style="margin: 0; font-size: 13px; opacity: 0.9;">You can view data but cannot add or edit entries. Contact admin for edit access.</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info" id="entryAlert">
                     <i class="fas fa-info-circle"></i>
                     <span>Enter your production data below. Please verify date and shift before saving!</span>
                 </div>
                 
-                <div class="form-section">
+                <div class="form-section" id="entryFormSection">
                     <div class="form-row">
                         <div>
                             <label><i class="fas fa-calendar"></i> Date</label>
@@ -864,7 +1070,7 @@
                 
                 <div class="machine-grid" id="machineGrid"></div>
                 
-                <div class="btn-group">
+                <div class="btn-group" id="entryButtons">
                     <button class="btn btn-success" onclick="saveEntry()" id="saveBtn">
                         <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
                     </button>
@@ -877,14 +1083,69 @@
                 </div>
             </div>
             
+            <!-- Tab: Search -->
+            <div class="tab-content" id="search-tab">
+                <div class="search-section">
+                    <h4><i class="fas fa-search"></i> Search Production Data</h4>
+                    <div class="search-grid">
+                        <div>
+                            <label><i class="fas fa-calendar"></i> Date</label>
+                            <input type="date" id="searchDate" onchange="performSearch()">
+                        </div>
+                        <div>
+                            <label><i class="fas fa-clock"></i> Shift</label>
+                            <select id="searchShift" onchange="performSearch()">
+                                <option value="">All Shifts</option>
+                                <option value="DAY SHIFT">☀️ DAY SHIFT</option>
+                                <option value="NIGHT SHIFT">🌙 NIGHT SHIFT</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label><i class="fas fa-cogs"></i> Machine</label>
+                            <select id="searchMachine" onchange="performSearch()">
+                                <option value="">All Machines</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label><i class="fas fa-box"></i> Product Name</label>
+                            <input type="text" id="searchProduct" placeholder="Search product..." oninput="performSearch()">
+                        </div>
+                    </div>
+                    <div class="btn-group" style="margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="performSearch()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearSearch()">
+                            <i class="fas fa-times"></i> Clear Filters
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="search-results" id="searchResults">
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>Use the filters above to search for production data</p>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Tab: Import WhatsApp -->
             <div class="tab-content" id="import-tab">
-                <div class="alert alert-warning">
+                <!-- View Only Notice for Import -->
+                <div class="view-only-notice" id="importViewOnlyNotice" style="display: none;">
+                    <i class="fas fa-eye"></i>
+                    <div>
+                        <strong>View Only Mode</strong>
+                        <p style="margin: 0; font-size: 13px; opacity: 0.9;">You cannot import data. Contact admin for access.</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning" id="importAlert">
                     <i class="fas fa-whatsapp" style="color: #25D366;"></i>
                     <span><strong>WhatsApp Import:</strong> Paste your exported WhatsApp chat messages below to automatically import production data.</span>
                 </div>
                 
-                <div class="form-section">
+                <div class="form-section" id="importFormSection">
                     <label><i class="fas fa-paste"></i> Paste WhatsApp Messages Here:</label>
                     <textarea id="whatsappText" class="import-textarea" placeholder="Paste your WhatsApp exported chat here...
 
@@ -897,7 +1158,7 @@ Example format:
 ..."></textarea>
                 </div>
                 
-                <div class="btn-group">
+                <div class="btn-group" id="importButtons">
                     <button class="btn btn-primary" onclick="parseWhatsApp()">
                         <i class="fas fa-search"></i> Parse Messages
                     </button>
@@ -928,7 +1189,7 @@ Example format:
             <div class="tab-content" id="report-tab">
                 <div class="alert alert-warning" id="viewOnlyAlert" style="display:none;">
                     <i class="fas fa-eye"></i>
-                    <span><strong>View Only Mode:</strong> Only administrators can edit or delete entries.</span>
+                    <span><strong>View Only Mode:</strong> Only administrators and editors can edit or delete entries.</span>
                 </div>
                 
                 <div class="report-controls">
@@ -1040,12 +1301,13 @@ Example format:
             appId: "1:795824130015:web:e9485b5fa19ff459e8266a"
         };
         
-        // LOGIN CREDENTIALS
+        // LOGIN CREDENTIALS - Updated with roles
         const USERS = {
-            "admin":   { password: "admin123",   name: "Administrator", role: "admin" },
-            "nouman":  { password: "nouman123",  name: "Nouman Shah Bodla", role: "user" },
-            "op1":     { password: "op1",        name: "Operator 1", role: "user" },
-            "op2":     { password: "op2",        name: "Operator 2", role: "user" }
+            "admin":   { password: "admin123",   name: "Administrator", role: "admin", canEdit: true },
+            "nouman":  { password: "nouman123",  name: "Nouman Shah Bodla", role: "developer", canEdit: true },
+            "kamran":  { password: "kamran123",  name: "Kamran", role: "manager", canEdit: true },
+            "op1":     { password: "op1",        name: "Operator 1", role: "viewer", canEdit: false },
+            "op2":     { password: "op2",        name: "Operator 2", role: "viewer", canEdit: false }
         };
         
         // MACHINES
@@ -1072,8 +1334,15 @@ Example format:
         let parsedEntries = [];
         let isSaving = false;
         
+        // Check if user is admin
         function isAdmin() {
             return currentUser && currentUser.username === 'admin';
+        }
+        
+        // Check if user can edit (admin, nouman, or kamran)
+        function canEdit() {
+            if (!currentUser) return false;
+            return ['admin', 'nouman', 'kamran'].includes(currentUser.username);
         }
         
         document.addEventListener('DOMContentLoaded', () => {
@@ -1099,6 +1368,7 @@ Example format:
                         username: u, 
                         name: USERS[u].name, 
                         role: USERS[u].role,
+                        canEdit: USERS[u].canEdit,
                         loginTime: new Date().toLocaleString() 
                     };
                     localStorage.setItem('nozomi_user', JSON.stringify(currentUser));
@@ -1150,17 +1420,72 @@ Example format:
             document.getElementById('avatar').textContent = currentUser.name.charAt(0).toUpperCase();
             document.getElementById('loginTime').textContent = currentUser.loginTime;
             
-            if (isAdmin()) {
+            // Show appropriate badge
+            document.getElementById('adminBadge').style.display = 'none';
+            document.getElementById('editorBadge').style.display = 'none';
+            document.getElementById('viewerBadge').style.display = 'none';
+            
+            if (currentUser.username === 'admin') {
                 document.getElementById('adminBadge').style.display = 'inline';
-                document.getElementById('viewOnlyAlert').style.display = 'none';
-                document.getElementById('restoreSection').style.display = 'block';
+            } else if (canEdit()) {
+                document.getElementById('editorBadge').style.display = 'inline';
             } else {
-                document.getElementById('adminBadge').style.display = 'none';
-                document.getElementById('viewOnlyAlert').style.display = 'flex';
-                document.getElementById('restoreSection').style.display = 'none';
+                document.getElementById('viewerBadge').style.display = 'inline';
             }
             
+            // Apply view-only restrictions
+            applyAccessRestrictions();
+            
             initApp();
+        }
+        
+        function applyAccessRestrictions() {
+            const userCanEdit = canEdit();
+            
+            // Entry Tab restrictions
+            if (!userCanEdit) {
+                document.getElementById('viewOnlyNotice').style.display = 'flex';
+                document.getElementById('entryButtons').style.display = 'none';
+                document.getElementById('entryAlert').innerHTML = '<i class="fas fa-eye"></i><span>You are in view-only mode. You can view the form but cannot save changes.</span>';
+                document.getElementById('entryAlert').className = 'alert alert-warning';
+                
+                // Disable all inputs in entry form
+                document.querySelectorAll('#entry-tab input, #entry-tab select, #entry-tab textarea').forEach(el => {
+                    el.disabled = true;
+                });
+                document.querySelectorAll('#entry-tab .add-btn, #entry-tab .remove-row-btn').forEach(el => {
+                    el.style.display = 'none';
+                });
+            } else {
+                document.getElementById('viewOnlyNotice').style.display = 'none';
+                document.getElementById('entryButtons').style.display = 'flex';
+            }
+            
+            // Import Tab restrictions
+            if (!userCanEdit) {
+                document.getElementById('importViewOnlyNotice').style.display = 'flex';
+                document.getElementById('importButtons').style.display = 'none';
+                document.getElementById('whatsappText').disabled = true;
+                document.getElementById('importAlert').style.display = 'none';
+            } else {
+                document.getElementById('importViewOnlyNotice').style.display = 'none';
+                document.getElementById('importButtons').style.display = 'flex';
+                document.getElementById('whatsappText').disabled = false;
+            }
+            
+            // Report Tab restrictions
+            if (!userCanEdit) {
+                document.getElementById('viewOnlyAlert').style.display = 'flex';
+            } else {
+                document.getElementById('viewOnlyAlert').style.display = 'none';
+            }
+            
+            // Backup Tab - Restore only for admin
+            if (isAdmin()) {
+                document.getElementById('restoreSection').style.display = 'block';
+            } else {
+                document.getElementById('restoreSection').style.display = 'none';
+            }
         }
         
         function initApp() {
@@ -1169,8 +1494,17 @@ Example format:
             document.getElementById('reportMonth').value = m;
             document.getElementById('summaryMonth').value = m;
             buildMachines();
+            buildSearchMachineOptions();
             updateEntryDisplay();
             initFirebase();
+        }
+        
+        function buildSearchMachineOptions() {
+            const select = document.getElementById('searchMachine');
+            select.innerHTML = '<option value="">All Machines</option>';
+            MACHINES.forEach(m => {
+                select.innerHTML += `<option value="${m.name}">${m.name}</option>`;
+            });
         }
         
         function initFirebase() {
@@ -1228,27 +1562,34 @@ Example format:
         
         function buildMachines() {
             const grid = document.getElementById('machineGrid');
+            const userCanEdit = canEdit();
+            
             grid.innerHTML = MACHINES.map(m => `
                 <div class="machine-card">
                     <h4><i class="fas ${m.icon}"></i> ${m.name}</h4>
                     <div class="products-container" data-machine="${m.name}">
                         <div class="product-row">
-                            <input type="text" placeholder="Product Name" class="product-name">
-                            <input type="number" placeholder="Qty" class="product-qty" min="0">
-                            <select class="product-uom">
+                            <input type="text" placeholder="Product Name" class="product-name" ${!userCanEdit ? 'disabled' : ''}>
+                            <input type="number" placeholder="Qty" class="product-qty" min="0" ${!userCanEdit ? 'disabled' : ''}>
+                            <select class="product-uom" ${!userCanEdit ? 'disabled' : ''}>
                                 <option>PCS</option><option>CTNS</option><option>BOX</option><option>PKTS</option>
                             </select>
-                            <button type="button" class="remove-row-btn" onclick="removeProductRow(this)" title="Remove">
+                            ${userCanEdit ? `<button type="button" class="remove-row-btn" onclick="removeProductRow(this)" title="Remove">
                                 <i class="fas fa-times"></i>
-                            </button>
+                            </button>` : ''}
                         </div>
                     </div>
-                    <button type="button" class="add-btn" onclick="addProductRow(this)"><i class="fas fa-plus"></i> Add Product</button>
+                    ${userCanEdit ? `<button type="button" class="add-btn" onclick="addProductRow(this)"><i class="fas fa-plus"></i> Add Product</button>` : ''}
                 </div>
             `).join('');
         }
         
         function addProductRow(btn) {
+            if (!canEdit()) {
+                toast('❌ You do not have permission to add products!', 'error');
+                return;
+            }
+            
             const container = btn.previousElementSibling;
             const row = document.createElement('div');
             row.className = 'product-row';
@@ -1265,6 +1606,11 @@ Example format:
         }
         
         function removeProductRow(btn) {
+            if (!canEdit()) {
+                toast('❌ You do not have permission to remove products!', 'error');
+                return;
+            }
+            
             const row = btn.closest('.product-row');
             const container = row.closest('.products-container');
             if (container.querySelectorAll('.product-row').length > 1) {
@@ -1276,9 +1622,168 @@ Example format:
         }
         
         // =============================================
-        // MAIN SAVE FUNCTION - SIMPLIFIED AND FIXED
+        // SEARCH FUNCTIONALITY
+        // =============================================
+        function performSearch() {
+            const searchDate = document.getElementById('searchDate').value;
+            const searchShift = document.getElementById('searchShift').value;
+            const searchMachine = document.getElementById('searchMachine').value;
+            const searchProduct = document.getElementById('searchProduct').value.toLowerCase().trim();
+            
+            const resultsContainer = document.getElementById('searchResults');
+            
+            // Filter data
+            let filteredEntries = [];
+            
+            Object.entries(allData).forEach(([key, entry]) => {
+                if (!entry || !entry.machines) return;
+                
+                let matchesFilters = true;
+                
+                // Date filter
+                if (searchDate && entry.date !== searchDate) {
+                    matchesFilters = false;
+                }
+                
+                // Shift filter
+                if (searchShift && entry.shift !== searchShift) {
+                    matchesFilters = false;
+                }
+                
+                // Machine and Product filter
+                if (matchesFilters && (searchMachine || searchProduct)) {
+                    let hasMatchingProduct = false;
+                    
+                    Object.entries(entry.machines).forEach(([machine, products]) => {
+                        // If machine filter is set and doesn't match, skip
+                        if (searchMachine && machine !== searchMachine) return;
+                        
+                        products.forEach(p => {
+                            if (!searchProduct || p.product.toLowerCase().includes(searchProduct)) {
+                                hasMatchingProduct = true;
+                            }
+                        });
+                    });
+                    
+                    if (!hasMatchingProduct && (searchMachine || searchProduct)) {
+                        matchesFilters = false;
+                    }
+                }
+                
+                if (matchesFilters) {
+                    filteredEntries.push({ key, ...entry });
+                }
+            });
+            
+            // Sort by date
+            filteredEntries.sort((a, b) => b.date.localeCompare(a.date));
+            
+            // Render results
+            if (filteredEntries.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>No results found for your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            filteredEntries.forEach(entry => {
+                const formattedDate = new Date(entry.date).toLocaleDateString('en-GB', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                html += `
+                    <div class="search-result-card">
+                        <div class="search-result-header">
+                            <span class="search-result-date">
+                                <i class="fas fa-calendar-alt"></i> ${formattedDate}
+                            </span>
+                            <span class="search-result-shift ${entry.shift === 'NIGHT SHIFT' ? 'night' : ''}">
+                                ${entry.shift === 'NIGHT SHIFT' ? '🌙' : '☀️'} ${entry.shift}
+                            </span>
+                        </div>
+                        <div class="search-machine-grid">
+                `;
+                
+                Object.entries(entry.machines).forEach(([machine, products]) => {
+                    // If machine filter is set and doesn't match, skip
+                    if (searchMachine && machine !== searchMachine) return;
+                    
+                    // Filter products if product search is set
+                    let filteredProducts = products;
+                    if (searchProduct) {
+                        filteredProducts = products.filter(p => 
+                            p.product.toLowerCase().includes(searchProduct)
+                        );
+                    }
+                    
+                    if (filteredProducts.length === 0) return;
+                    
+                    const machineIcon = MACHINES.find(m => m.name === machine)?.icon || 'fa-cogs';
+                    
+                    html += `
+                        <div class="search-machine-card">
+                            <h5><i class="fas ${machineIcon}"></i> ${machine}</h5>
+                    `;
+                    
+                    filteredProducts.forEach(p => {
+                        let productName = p.product;
+                        // Highlight matching text
+                        if (searchProduct) {
+                            const regex = new RegExp(`(${searchProduct})`, 'gi');
+                            productName = productName.replace(regex, '<span class="highlight">$1</span>');
+                        }
+                        
+                        html += `
+                            <div class="search-product-item">
+                                <span>${productName}</span>
+                                <span class="qty">${p.quantity} ${p.uom}</span>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `</div>`;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsContainer.innerHTML = html;
+        }
+        
+        function clearSearch() {
+            document.getElementById('searchDate').value = '';
+            document.getElementById('searchShift').value = '';
+            document.getElementById('searchMachine').value = '';
+            document.getElementById('searchProduct').value = '';
+            
+            document.getElementById('searchResults').innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <p>Use the filters above to search for production data</p>
+                </div>
+            `;
+        }
+        
+        // =============================================
+        // MAIN SAVE FUNCTION - WITH ACCESS CHECK
         // =============================================
         async function saveEntry() {
+            // Check permission first
+            if (!canEdit()) {
+                toast('❌ You do not have permission to save data!', 'error');
+                return;
+            }
+            
             // Prevent double-click
             if (isSaving) {
                 toast('Please wait, save in progress...', 'warning');
@@ -1446,6 +1951,11 @@ Example format:
         
         // Clear entire form including date and shift
         function clearForm() {
+            if (!canEdit()) {
+                toast('❌ You do not have permission to modify the form!', 'error');
+                return;
+            }
+            
             document.getElementById('entryDate').valueAsDate = new Date();
             document.getElementById('entryShift').value = '';
             clearProductsOnly();
@@ -1455,6 +1965,11 @@ Example format:
         
         // Reset for new entry
         function resetForNewEntry() {
+            if (!canEdit()) {
+                toast('❌ You do not have permission to modify the form!', 'error');
+                return;
+            }
+            
             document.getElementById('entryShift').value = '';
             clearProductsOnly();
             updateEntryDisplay();
@@ -1469,12 +1984,18 @@ Example format:
             if (name === 'report') generateReport();
             if (name === 'summary') generateSummary();
             if (name === 'backup') updateStats();
+            if (name === 'search') performSearch();
         }
         
         // =============================================
         // WHATSAPP PARSER
         // =============================================
         function parseWhatsApp() {
+            if (!canEdit()) {
+                toast('❌ You do not have permission to import data!', 'error');
+                return;
+            }
+            
             const text = document.getElementById('whatsappText').value;
             if (!text.trim()) {
                 toast('Please paste WhatsApp messages first!', 'warning');
@@ -1825,6 +2346,11 @@ Example format:
         }
         
         async function importParsedData() {
+            if (!canEdit()) {
+                toast('❌ You do not have permission to import data!', 'error');
+                return;
+            }
+            
             if (parsedEntries.length === 0) {
                 toast('No data to import!', 'warning');
                 return;
@@ -1905,7 +2431,7 @@ Example format:
             const [year, mon] = month.split('-');
             const days = new Date(year, mon, 0).getDate();
             
-            const showActions = isAdmin();
+            const showActions = canEdit();
             
             let html = '<table class="data-table"><thead><tr>';
             html += '<th>DATE</th><th>SHIFT</th>';
@@ -1989,8 +2515,8 @@ Example format:
         }
         
         function openEditModal(key) {
-            if (!isAdmin()) {
-                toast('❌ Only administrators can edit entries!', 'error');
+            if (!canEdit()) {
+                toast('❌ You do not have permission to edit entries!', 'error');
                 return;
             }
             
@@ -2074,8 +2600,8 @@ Example format:
         }
         
         async function saveEdit() {
-            if (!isAdmin()) {
-                toast('❌ Only administrators can edit entries!', 'error');
+            if (!canEdit()) {
+                toast('❌ You do not have permission to edit entries!', 'error');
                 closeEditModal();
                 return;
             }
@@ -2090,7 +2616,7 @@ Example format:
                 shift: shift,
                 machines: {},
                 savedBy: currentUser ? currentUser.name : 'Unknown',
-                editedBy: 'Admin',
+                editedBy: currentUser ? currentUser.name : 'Unknown',
                 timestamp: Date.now()
             };
             
@@ -2131,8 +2657,8 @@ Example format:
         }
         
         async function deleteEntry(key) {
-            if (!isAdmin()) {
-                toast('❌ Only administrators can delete entries!', 'error');
+            if (!canEdit()) {
+                toast('❌ You do not have permission to delete entries!', 'error');
                 return;
             }
             
